@@ -13,12 +13,13 @@ SUBDIRS=
 
 # object files
 OBJ=	$(NAME).o \
-		gui.o
+		gui.o \
+		scraper.o
 
 # rules
 all: $(NAME)
 
-$(NAME): $(OBJ) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+$(NAME): $(OBJ) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -lcurl
 
 clean: 
 	$(RM) $(OBJ)
