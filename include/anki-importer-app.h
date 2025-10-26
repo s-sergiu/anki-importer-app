@@ -3,6 +3,8 @@
 
 #include "raylib.h"
 #include <curl/curl.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <stdio.h>
 #define RAYGUI_IMPLEMENTATION
 
