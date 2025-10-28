@@ -2,32 +2,93 @@
 #include "anki-importer-app.h"
 #include <curl/curl.h>
 
+void	t_data_addfront(t_data **lst, t_data *new)
+{
+	new->next = *lst;
+	*lst = new;
+}
+
+
+t_data	*t_data_new(void *content)
+{
+	t_data	*new;
+
+	new = (t_data *)malloc(sizeof(t_data));
+	if (!new)
+		return (NULL);
+	new->memory = content;
+	new->next = NULL;
+	return (new);
+}
+
 size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
 {
-	int	test;
-	(void)userdata;
-	(void)size;
-	(void)nmemb;
-	test = open("test.txt", O_CREAT | O_RDWR);
-	write(test, ptr, nmemb);
-	return (1);
+	char *data;
+
+	data = (char *)malloc(sizeof(char) * nmemb + size);
+
+	memset(data, 0, nmemb + size);
+	memcpy(data, ptr, nmemb);
+
+	t_data_addfront((t_data **)userdata, t_data_new(data));
+
+	return (size * nmemb);
+}
+
+void list_item(void *memory)
+{
+	int		fd;
+
+	fd = open("data.html", O_CREAT | O_APPEND | O_WRONLY, 0600);
+	write(fd, (char *)memory, strlen((char *)memory));
+	close(fd);
+}
+
+void	t_data_iter(t_data *lst, void (*f)(void *))
+{
+	t_data	*curr;
+
+	curr = lst;
+	while (curr)
+	{
+		f(curr->memory);
+		curr = curr->next;
+	}
+}
+
+void	set_options(CURL *handle, t_data **data)
+{
+	CURLcode	res;
+	static char	errorBuffer[CURL_ERROR_SIZE];
+	char		*url = "https://www.verbformen.de/?w=ausreichen&id=verb%3Aausreichen";
+
+	res = curl_easy_setopt(handle, CURLOPT_ERRORBUFFER, errorBuffer);
+	if(res != CURLE_OK)
+		fprintf(stderr, "Failed: [%d]\n", res);
+	res = curl_easy_setopt(handle, CURLOPT_URL, url);
+	if(res != CURLE_OK)
+		fprintf(stderr, "Failed: [%d]\n", res);
+	res = curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_callback);
+	if(res != CURLE_OK)
+		fprintf(stderr, "Failed: [%d]\n", res);
+	res = curl_easy_setopt(handle, CURLOPT_WRITEDATA, data);
+	if(res != CURLE_OK)
+		fprintf(stderr, "Failed: [%d]\n", res);
 }
 
 int scraper_function(void)
 {
-	CURLcode	res;
-	char		*url = "https://www.verbformen.de/deklination/substantive/Abend.htm";
 	CURL		*curl;
+	t_data		*data = NULL;
 
 	curl_global_init(CURL_GLOBAL_DEFAULT);
 
 	curl = curl_easy_init();
-	curl_easy_setopt(curl, CURLOPT_URL, url);
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
-	res = curl_easy_perform(curl);
-	if (CURLE_OK == res)
-		printf("all good\n");
-	(void)res;
+	set_options(curl, &data);
+	curl_easy_perform(curl);
+
+	// output structure to a file - data.html
+	t_data_iter(data, list_item);
 
 	curl_easy_cleanup(curl);
 
