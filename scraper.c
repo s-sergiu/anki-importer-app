@@ -56,12 +56,15 @@ void	t_data_iter(t_data *lst, void (*f)(void *))
 	}
 }
 
-void	set_options(CURL *handle, t_data **data)
+void	set_options(CURL *handle, t_data **data, char *word)
 {
 	CURLcode	res;
 	static char	errorBuffer[CURL_ERROR_SIZE];
-	char		*url = "https://www.verbformen.de/?w=ausreichen&id=verb%3Aausreichen";
+	char		url[100] ="https://www.verbformen.de/?w=";
 
+	strncat(url, word, strlen(word));
+	printf("word: %s\n", word);
+	printf("url: %s\n", url);
 	res = curl_easy_setopt(handle, CURLOPT_ERRORBUFFER, errorBuffer);
 	if(res != CURLE_OK)
 		fprintf(stderr, "Failed: [%d]\n", res);
@@ -76,7 +79,7 @@ void	set_options(CURL *handle, t_data **data)
 		fprintf(stderr, "Failed: [%d]\n", res);
 }
 
-int scraper_function(void)
+int scraper_function(char *word)
 {
 	CURL		*curl;
 	t_data		*data = NULL;
@@ -84,7 +87,7 @@ int scraper_function(void)
 	curl_global_init(CURL_GLOBAL_DEFAULT);
 
 	curl = curl_easy_init();
-	set_options(curl, &data);
+	set_options(curl, &data, word);
 	curl_easy_perform(curl);
 
 	// output structure to a file - data.html

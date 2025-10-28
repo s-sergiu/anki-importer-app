@@ -3,7 +3,6 @@
 
 int main()
 {
-	//run_gui();
-	scraper_function();
+	run_gui();
     return 0;
 }

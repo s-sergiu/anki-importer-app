@@ -18,6 +18,6 @@ struct s_data {
 };
 
 void	run_gui(void);
-int		scraper_function(void);
+int		scraper_function(char *);
 
 #endif
