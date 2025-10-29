@@ -14,7 +14,8 @@ SUBDIRS=
 # object files
 OBJ=	$(NAME).o \
 		gui.o \
-		scraper.o
+		scraper.o \
+		struct.o
 
 # rules
 all: $(NAME)

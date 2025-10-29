@@ -1,39 +1,5 @@
 
 #include "anki-importer-app.h"
-#include <curl/curl.h>
-
-void	t_data_addfront(t_data **lst, t_data *new)
-{
-	new->next = *lst;
-	*lst = new;
-}
-
-void	t_data_clear(t_data **lst, void (*del)(void*))
-{
-	t_data	*current;
-
-	current = *lst;
-	while (current)
-	{
-		del((*lst)->memory);
-		current = current->next;
-		free(*lst);
-		*lst = current;
-	}
-	*lst = NULL;
-}
-
-t_data	*t_data_new(void *content)
-{
-	t_data	*new;
-
-	new = (t_data *)malloc(sizeof(t_data));
-	if (!new)
-		return (NULL);
-	new->memory = content;
-	new->next = NULL;
-	return (new);
-}
 
 size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
 {
@@ -49,25 +15,13 @@ size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
 	return (size * nmemb);
 }
 
-void list_item(void *memory)
+void save_to_file(void *memory)
 {
 	int		fd;
 
 	fd = open("data.html", O_CREAT | O_APPEND | O_WRONLY, 0600);
 	write(fd, (char *)memory, strlen((char *)memory));
 	close(fd);
-}
-
-void	t_data_iter(t_data *lst, void (*f)(void *))
-{
-	t_data	*curr;
-
-	curr = lst;
-	while (curr)
-	{
-		f(curr->memory);
-		curr = curr->next;
-	}
 }
 
 void	set_options(CURL *handle, t_data **data, char *word)
@@ -105,7 +59,7 @@ int scraper_function(char *word)
 	curl_easy_perform(curl);
 
 	// output structure to a file - data.html
-	t_data_iter(data, list_item);
+	t_data_iter(data, save_to_file);
 	t_data_clear(&data, free);
 
 	curl_easy_cleanup(curl);
