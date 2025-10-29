@@ -4,34 +4,20 @@
 
 void run_gui()
 {
-    InitWindow(400, 400, "main window");
-    SetTargetFPS(60);
 	char word[20];
 
+    InitWindow(800, 600, "Anki importer App");
+	GuiLoadStyle("style_amber.rgs");
+    SetTargetFPS(60);
 
 	memset(&word, 0, 20);
-
-    bool showMessageBox = false;
-
     while (!WindowShouldClose())
     {
         BeginDrawing();
-			if (GuiTextInputBox((Rectangle){100, 180, 200, 200}, "Add", "Insert word to add:", "Submit", word ,10, NULL) > 0)
-			{
-				printf("result: %s\n", word);
+			if (GuiTextInputBox((Rectangle){100, 180, 200, 200}, 
+				"Add", "Insert word to add:", "Submit", word ,10, NULL) > 0)
 				scraper_function(word);
-			}
             ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
-            if (GuiButton((Rectangle){ 24, 24, 120, 30 }, "#191#Generate")) 
-			{
-				showMessageBox = true;
-			}
-            if (showMessageBox)
-            {
-                int result = GuiMessageBox((Rectangle){ 85, 70, 250, 100 },
-                    "#191#MessageBox", "File generated!", "Ok");
-                if (result >= 0) showMessageBox = false;
-            }
         EndDrawing();
     }
     CloseWindow();
