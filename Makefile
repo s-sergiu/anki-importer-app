@@ -20,7 +20,7 @@ OBJ=	$(NAME).o \
 # rules
 all: $(NAME)
 
-$(NAME): $(OBJ) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -lcurl
+$(NAME): $(OBJ) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -lcurl -lraygui
 
 clean: 
 	$(RM) $(OBJ)
