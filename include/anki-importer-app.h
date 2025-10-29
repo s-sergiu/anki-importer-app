@@ -19,8 +19,8 @@ struct s_data {
 };
 
 void	t_data_addfront(t_data**, t_data*);
-void	t_data_iter(t_data*, void (*)(void*));
-void	t_data_clear(t_data**, void (*)(void*));
+int		t_data_iter(t_data*, void (*)(void*));
+int		t_data_clear(t_data**, void (*)(void*));
 t_data	*t_data_new(void*);
 
 void	run_gui(void);

@@ -1,7 +1,7 @@
 
 #include "anki-importer-app.h"
 
-size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
+static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
 {
 	char *data;
 
@@ -31,8 +31,6 @@ void	set_options(CURL *handle, t_data **data, char *word)
 	char		url[100] ="https://www.verbformen.de/?w=";
 
 	strncat(url, word, strlen(word));
-	printf("word: %s\n", word);
-	printf("url: %s\n", url);
 	res = curl_easy_setopt(handle, CURLOPT_ERRORBUFFER, errorBuffer);
 	if(res != CURLE_OK)
 		fprintf(stderr, "Failed: [%d]\n", res);
@@ -59,8 +57,10 @@ int scraper_function(char *word)
 	curl_easy_perform(curl);
 
 	// output structure to a file - data.html
-	t_data_iter(data, save_to_file);
-	t_data_clear(&data, free);
+	printf("Iterated over: %d nodes to save the file.\n",
+			t_data_iter(data, save_to_file));
+	printf("Iterated over: %d nodes to clear the struct of memory.\n",
+			t_data_clear(&data, free));
 
 	curl_easy_cleanup(curl);
 
