@@ -8,6 +8,20 @@ void	t_data_addfront(t_data **lst, t_data *new)
 	*lst = new;
 }
 
+void	t_data_clear(t_data **lst, void (*del)(void*))
+{
+	t_data	*current;
+
+	current = *lst;
+	while (current)
+	{
+		del((*lst)->memory);
+		current = current->next;
+		free(*lst);
+		*lst = current;
+	}
+	*lst = NULL;
+}
 
 t_data	*t_data_new(void *content)
 {
@@ -92,6 +106,7 @@ int scraper_function(char *word)
 
 	// output structure to a file - data.html
 	t_data_iter(data, list_item);
+	t_data_clear(&data, free);
 
 	curl_easy_cleanup(curl);
 
