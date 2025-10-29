@@ -10,7 +10,7 @@ static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdat
 	memset(data, 0, nmemb + size);
 	memcpy(data, ptr, nmemb);
 
-	t_data_addfront((t_data **)userdata, t_data_new(data));
+	t_data_addback((t_data **)userdata, t_data_new(data));
 
 	return (size * nmemb);
 }

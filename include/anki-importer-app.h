@@ -19,6 +19,7 @@ struct s_data {
 	t_data	*next;
 };
 
+void	t_data_addback(t_data**, t_data*);
 void	t_data_addfront(t_data**, t_data*);
 int		t_data_iter(t_data*, void (*)(void*));
 int		t_data_clear(t_data**, void (*)(void*));
