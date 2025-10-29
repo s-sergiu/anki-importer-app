@@ -7,7 +7,7 @@ void run_gui()
 	char word[20];
 
     InitWindow(800, 600, "Anki importer App");
-	GuiLoadStyle("style_amber.rgs");
+	GuiLoadStyle("theme/style_amber.rgs");
     SetTargetFPS(60);
 
 	memset(&word, 0, 20);
