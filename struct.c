@@ -1,6 +1,21 @@
 
 #include "anki-importer-app.h"
 
+void	t_data_addback(t_data **lst, t_data *new)
+{
+	t_data	*current;
+
+	if (*lst == NULL)
+	{
+		*lst = new;
+		return ;
+	}
+	current = *lst;
+	while (current->next != NULL)
+		current = current->next;
+	current->next = new;
+}
+
 void	t_data_addfront(t_data **lst, t_data *new)
 {
 	new->next = *lst;
