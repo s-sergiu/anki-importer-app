@@ -50,8 +50,9 @@ void	set_options(CURL *handle, t_data **data, char *word)
 int scraper_function(char *word)
 {
 	CURL		*curl;
-	t_data		*data = NULL;
+	t_data		*data;
 
+	memset(&data, 0, sizeof(data));
 	curl_global_init(CURL_GLOBAL_DEFAULT);
 
 	curl = curl_easy_init();
