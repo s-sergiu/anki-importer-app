@@ -3,14 +3,16 @@
 
 static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
 {
-	char *data;
+	char	*data;
+	t_data	*node;
 
 	data = (char *)malloc(sizeof(char) * nmemb + size);
-
 	memset(data, 0, nmemb + size);
 	memcpy(data, ptr, nmemb);
-
-	t_data_addback((t_data **)userdata, t_data_new(data));
+	node = t_data_new(data);
+	t_data_addback((t_data **)userdata, node);
+	node->chunk = nmemb * size;
+	(*(t_data**)userdata)->chunk += node->chunk;
 
 	return (size * nmemb);
 }

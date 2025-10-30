@@ -49,6 +49,7 @@ t_data	*t_data_new(void *content)
 	if (!new)
 		return (NULL);
 	new->memory = content;
+	new->chunk = 0;
 	new->next = NULL;
 	return (new);
 }

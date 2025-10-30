@@ -17,6 +17,7 @@ typedef struct s_data t_data;
 struct s_data {
 	char	*memory;
 	t_data	*next;
+	size_t	chunk;
 };
 
 void	t_data_addback(t_data**, t_data*);
