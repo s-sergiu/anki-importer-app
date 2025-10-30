@@ -12,7 +12,6 @@ static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdat
 	node = t_data_new(data);
 	t_data_addback((t_data **)userdata, node);
 	node->chunk = nmemb * size;
-	(*(t_data**)userdata)->chunk += node->chunk;
 
 	return (size * nmemb);
 }
