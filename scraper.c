@@ -50,6 +50,7 @@ int scraper_function(char *word)
 {
 	CURL		*curl;
 	t_data		*data;
+	char		*placeholder;
 
 	memset(&data, 0, sizeof(data));
 	curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -58,6 +59,29 @@ int scraper_function(char *word)
 	set_options(curl, &data, word);
 	curl_easy_perform(curl);
 
+	// calculate the sum of the chunks;
+	t_data *curr;
+	int sum;
+	curr = data;
+	sum = 0;
+	while (curr)
+	{
+		sum += curr->chunk;
+		curr=curr->next;
+	}
+	// allocate one contiguos block of memory total size of chunks;
+	placeholder = malloc(sizeof(char) * sum);
+	curr = data;
+	int index = 0;
+	// copy each chunk into the block;
+	while (curr)
+	{
+		strncat(placeholder + index, curr->memory, curr->chunk);
+		curr=curr->next;
+		if (curr)
+			index += curr->chunk;
+	}
+
 	// output structure to a file - data.html
 	printf("Iterated over: %d nodes to save the file.\n",
 			t_data_iter(data, save_to_file));
@@ -65,6 +89,7 @@ int scraper_function(char *word)
 			t_data_clear(&data, free));
 
 	curl_easy_cleanup(curl);
+	//printf("%s", placeholder);
 
 	return(0);
 }
