@@ -53,7 +53,6 @@ int scraper_function(char *word)
 	char		*placeholder;
 
 	memset(&data, 0, sizeof(data));
-	curl_global_init(CURL_GLOBAL_DEFAULT);
 
 	curl = curl_easy_init();
 	set_options(curl, &data, word);
