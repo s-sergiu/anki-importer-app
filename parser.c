@@ -2,6 +2,7 @@
 #include "anki-importer-app.h"
 
 // optional function;
+// saves memory chunks to a file;
 void save_to_file(void *memory)
 {
 	int		fd;
@@ -11,6 +12,7 @@ void save_to_file(void *memory)
 	close(fd);
 }
 
+// returns value of the entire request in bytes;
 int get_total_chunks(t_data *data)
 {
 	t_data	*curr;
@@ -27,6 +29,7 @@ int get_total_chunks(t_data *data)
 	return (sum);
 }
 
+// copies each chunk of memory from the list to a contiguous block of mem;
 void str_chunk_copy(t_data *data, char *string)
 {
 	t_data	*curr;
@@ -43,15 +46,15 @@ void str_chunk_copy(t_data *data, char *string)
 	}
 }
 
+// allocate one contiguos block of memory total size of chunks;
+// copy from linked list to one single block of memory
+// output structure to a file - data.html
 int parse_data(t_data *transfer_data)
 {
 	char		*placeholder;
 
-	// allocate one contiguos block of memory total size of chunks;
 	placeholder = malloc(sizeof(char) * get_total_chunks(transfer_data));
-	// copy from linked list to one single block of memory
 	str_chunk_copy(transfer_data, placeholder);
-	// output structure to a file - data.html
 	printf("Iterated over: %d nodes to save the file.\n",
 			t_data_iter(transfer_data, save_to_file));
 	printf("Iterated over: %d nodes to clear the struct of memory.\n",
