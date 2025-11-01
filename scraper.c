@@ -1,7 +1,10 @@
 
 #include "anki-importer-app.h"
 
-static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdata)
+// creates a node and adds the *ptr value *data to its *memory;
+// adds the node to the *userdata list and sets the size chunk of the node;
+static size_t	write_callback(char *ptr, size_t size, size_t nmemb,
+							void *userdata)
 {
 	char	*data;
 	t_data	*node;
@@ -10,13 +13,14 @@ static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdat
 	memset(data, 0, nmemb + size);
 	memcpy(data, ptr, nmemb);
 	node = t_data_new(data);
-	t_data_addback((t_data **)userdata, node);
+	t_data_addback((t_data **)userdata, t_data_new(data));
 	node->chunk = nmemb * size;
 
 	return (size * nmemb);
 }
 
-void	set_options(CURL *handle, t_data **data, char *word)
+// sets the options for the handle;
+void			set_options(CURL *handle, t_data **data, char *word)
 {
 	CURLcode	res;
 	char		url[100] ="https://www.verbformen.de/?w=";
@@ -33,7 +37,8 @@ void	set_options(CURL *handle, t_data **data, char *word)
 		fprintf(stderr, "Failed: [%d]\n", res);
 }
 
-t_data	*fetch_http(char *search_var)
+// main function for fetching HTTP data;
+t_data			*fetch_http(char *search_var)
 {
 	CURLcode	res;
 	t_curl_data	curl_data;
