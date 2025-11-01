@@ -15,7 +15,8 @@ SUBDIRS=
 OBJ=	$(NAME).o \
 		gui.o \
 		scraper.o \
-		struct.o
+		struct.o \
+		parser.o
 
 # rules
 all: $(NAME)
