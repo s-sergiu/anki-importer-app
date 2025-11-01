@@ -19,13 +19,9 @@ static size_t write_callback(char *ptr, size_t size, size_t nmemb, void *userdat
 void	set_options(CURL *handle, t_data **data, char *word)
 {
 	CURLcode	res;
-	static char	errorBuffer[CURL_ERROR_SIZE];
 	char		url[100] ="https://www.verbformen.de/?w=";
 
 	strncat(url, word, strlen(word));
-	res = curl_easy_setopt(handle, CURLOPT_ERRORBUFFER, errorBuffer);
-	if(res != CURLE_OK)
-		fprintf(stderr, "Failed: [%d]\n", res);
 	res = curl_easy_setopt(handle, CURLOPT_URL, url);
 	if(res != CURLE_OK)
 		fprintf(stderr, "Failed: [%d]\n", res);
