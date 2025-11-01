@@ -35,13 +35,16 @@ void	set_options(CURL *handle, t_data **data, char *word)
 
 t_data	*fetch_http(char *search_var)
 {
+	CURLcode	res;
 	t_curl_data	curl_data;
 	t_data		*transfer_data;
 
 	memset(&transfer_data, 0, sizeof(transfer_data));
 	curl_data.handle = curl_easy_init();
 	set_options(curl_data.handle, &transfer_data, search_var);
-	curl_easy_perform(curl_data.handle);
+	res = curl_easy_perform(curl_data.handle);
+	if(res != CURLE_OK)
+		fprintf(stderr, "Failed: [%d]\n", res);
 	curl_easy_cleanup(curl_data.handle);
 
 	return (transfer_data);
