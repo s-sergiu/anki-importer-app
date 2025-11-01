@@ -13,6 +13,11 @@
 #define RAYGUI_IMPLEMENTATION
 
 typedef struct s_data t_data;
+typedef struct s_curl_data t_curl_data;
+
+struct s_curl_data {
+	CURL	*handle;
+};
 
 struct s_data {
 	char	*memory;
@@ -26,7 +31,9 @@ int		t_data_iter(t_data*, void (*)(void*));
 int		t_data_clear(t_data**, void (*)(void*));
 t_data	*t_data_new(void*);
 
-void	run_gui(void);
-int		scraper_function(char*);
+void	display_gui(void);
+t_data	*fetch_http(char*);
+int		parse_data(t_data*);
+
 
 #endif

@@ -3,6 +3,6 @@
 
 int main()
 {
-	run_gui();
+	display_gui();
     return 0;
 }

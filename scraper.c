@@ -78,31 +78,33 @@ void str_chunk_copy(t_data *data, char *string)
 	}
 }
 
-int scraper_function(char *word)
+t_data	*fetch_http(char *search_var)
 {
-	CURL		*curl;
-	t_data		*data;
+	t_curl_data	curl_data;
+	t_data		*transfer_data;
+
+	memset(&transfer_data, 0, sizeof(transfer_data));
+	curl_data.handle = curl_easy_init();
+	set_options(curl_data.handle, &transfer_data, search_var);
+	curl_easy_perform(curl_data.handle);
+	curl_easy_cleanup(curl_data.handle);
+
+	return (transfer_data);
+}
+
+int parse_data(t_data *transfer_data)
+{
 	char		*placeholder;
 
-	memset(&data, 0, sizeof(data));
-
-	curl = curl_easy_init();
-	set_options(curl, &data, word);
-	curl_easy_perform(curl);
-
 	// allocate one contiguos block of memory total size of chunks;
-	placeholder = malloc(sizeof(char) * get_total_chunks(data));
+	placeholder = malloc(sizeof(char) * get_total_chunks(transfer_data));
 	// copy from linked list to one single block of memory
-	str_chunk_copy(data, placeholder);
-
+	str_chunk_copy(transfer_data, placeholder);
 	// output structure to a file - data.html
 	printf("Iterated over: %d nodes to save the file.\n",
-			t_data_iter(data, save_to_file));
+			t_data_iter(transfer_data, save_to_file));
 	printf("Iterated over: %d nodes to clear the struct of memory.\n",
-			t_data_clear(&data, free));
-
-	curl_easy_cleanup(curl);
-	printf("%s", placeholder);
+			t_data_clear(&transfer_data, free));
 
 	return(0);
 }

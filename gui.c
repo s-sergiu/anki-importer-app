@@ -1,7 +1,7 @@
 
 #include "anki-importer-app.h"
 
-void run_gui()
+void display_gui()
 {
 	char word[20];
 
@@ -15,7 +15,7 @@ void run_gui()
         BeginDrawing();
 			if (GuiTextInputBox((Rectangle){100, 180, 200, 200}, 
 				"Add", "Insert word to add:", "Submit", word ,10, NULL) > 0)
-				scraper_function(word);
+				parse_data(fetch_http(word));
             ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
         EndDrawing();
     }
