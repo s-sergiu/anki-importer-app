@@ -25,15 +25,20 @@ struct s_data {
 	size_t	chunk;
 };
 
+// struct.c
 void	t_data_addback(t_data**, t_data*);
 void	t_data_addfront(t_data**, t_data*);
 int		t_data_iter(t_data*, void (*)(void*));
 int		t_data_clear(t_data**, void (*)(void*));
 t_data	*t_data_new(void*);
 
+// gui.c
 void	display_gui(void);
-t_data	*fetch_http(char*);
-int		parse_data(t_data*);
 
+// scraper.c
+t_data	*fetch_http(char*);
+
+// parser.c
+int		parse_data(t_data*);
 
 #endif
